@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+	"fmt"
 	"koda-b6-backend2/internal/models"
 	"koda-b6-backend2/internal/repository"
 )
@@ -29,4 +31,21 @@ func (s *UserService) Create(req *models.CreateUserRequest) {
 		Password: req.Password,
 	}
 	s.repo.Create(newUser)
+}
+
+func (s *UserService) Update(email string, u *models.UpdateUserRequest) (*models.User, error) {
+	if u.Password == "" {
+		return nil, errors.New("Password cannot blank")
+	}
+
+	user := &models.User{
+		Password: u.Password,
+	}
+
+	updatedUser, err := s.repo.Update(email, user)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update user: %w", err)
+	}
+
+	return updatedUser, nil
 }

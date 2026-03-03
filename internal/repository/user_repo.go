@@ -1,6 +1,9 @@
 package repository
 
-import "koda-b6-backend2/internal/models"
+import (
+	"errors"
+	"koda-b6-backend2/internal/models"
+)
 
 type UserRepository struct {
 	db *[]models.User
@@ -31,4 +34,26 @@ func (r *UserRepository) GetByEmail(email string) *models.User {
 // create user
 func (r *UserRepository) Create(user models.User) {
 	*r.db = append(*r.db, user)
+}
+
+// update user
+func (r *UserRepository) Update(email string, user *models.User) (*models.User, error) {
+	if r.db == nil {
+		return nil, errors.New("no data")
+	}
+
+	for i, v := range *r.db {
+		if v.Email == email {
+			(*r.db)[i].Password = user.Password
+
+			return &(*r.db)[i], nil
+		}
+	}
+	return nil, errors.New("User not found")
+}
+
+// delete user
+func (r *UserRepository) Delete(index int) {
+	data := *r.db
+	data = append(data[:index], data[index+1:]...)
 }

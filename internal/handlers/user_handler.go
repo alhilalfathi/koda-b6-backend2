@@ -65,3 +65,54 @@ func (h *UserHandler) Create(ctx *gin.Context) {
 		"message": "Create user successfuly",
 	})
 }
+
+// update user
+func (h *UserHandler) Update(ctx *gin.Context) {
+	email := ctx.Param("email")
+	if email == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Email cannot blank",
+		})
+		return
+	}
+
+	var user models.UpdateUserRequest
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Invalid request body: " + err.Error(),
+		})
+		return
+	}
+
+	updatedUser, err := h.service.Update(email, &user)
+	if err != nil {
+		if err.Error() == "User not found" {
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"success": false,
+				"message": "User not found",
+			})
+			return
+		}
+		if err.Error() == "Password cannot blank" {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"success": false,
+				"message": err.Error(),
+			})
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to update user: " + err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "User updated successfully",
+		"results": updatedUser,
+	})
+}
