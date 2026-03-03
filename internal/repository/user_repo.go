@@ -53,7 +53,13 @@ func (r *UserRepository) Update(email string, user *models.User) (*models.User, 
 }
 
 // delete user
-func (r *UserRepository) Delete(index int) {
+func (r *UserRepository) Delete(email string) error {
 	data := *r.db
-	data = append(data[:index], data[index+1:]...)
+	// data = append(data[:index], data[index+1:]...)
+	for i, v := range data {
+		if v.Email == email {
+			data = append(data[:i], data[i+1:]...)
+		}
+	}
+	return nil
 }

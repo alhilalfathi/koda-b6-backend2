@@ -49,3 +49,13 @@ func (s *UserService) Update(email string, u *models.UpdateUserRequest) (*models
 
 	return updatedUser, nil
 }
+
+func (s *UserService) Delete(email string) bool {
+	data := s.GetByEmail(email)
+	for i, v := range data {
+		if v.Email == email {
+			s.repo.Delete(i)
+		}
+	}
+	return true
+}
