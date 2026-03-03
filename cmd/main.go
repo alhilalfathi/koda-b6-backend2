@@ -16,6 +16,12 @@ func main() {
 	users := r.Group("/users")
 	{
 		users.GET("", userHandler.GetAll)
+		users.GET("/:email", userHandler.GetByEmail)
+	}
+
+	products := r.Group("/products")
+	{
+		products.GET("")
 	}
 
 	r.Run("localhost:8888")
