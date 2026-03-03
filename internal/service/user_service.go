@@ -22,3 +22,11 @@ func (s *UserService) GetAll() []models.User {
 func (s *UserService) GetByEmail(email string) *models.User {
 	return s.repo.GetByEmail(email)
 }
+
+func (s *UserService) Create(req *models.CreateUserRequest) {
+	newUser := models.User{
+		Email:    req.Email,
+		Password: req.Password,
+	}
+	s.repo.Create(newUser)
+}

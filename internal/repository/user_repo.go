@@ -27,3 +27,8 @@ func (r *UserRepository) GetByEmail(email string) *models.User {
 	}
 	return &models.User{}
 }
+
+// create user
+func (r *UserRepository) Create(user models.User) {
+	*r.db = append(*r.db, user)
+}

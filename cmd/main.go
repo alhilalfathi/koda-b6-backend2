@@ -17,6 +17,7 @@ func main() {
 	{
 		users.GET("", userHandler.GetAll)
 		users.GET("/:email", userHandler.GetByEmail)
+		users.POST("", userHandler.Create)
 	}
 
 	products := r.Group("/products")
