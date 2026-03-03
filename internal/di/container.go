@@ -29,7 +29,7 @@ func NewContainer() *Container {
 func (c *Container) initDependencies() {
 	c.userRepo = repository.NewUserRepository(c.user)
 	c.userService = service.NewUserService(c.userRepo)
-	c.userHandler = handlers.NewUserHanler(c.userService)
+	c.userHandler = handlers.NewUserHandler(c.userService)
 }
 
 func (c *Container) UserHandler() *handlers.UserHandler {
