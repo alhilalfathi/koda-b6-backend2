@@ -50,12 +50,17 @@ func (s *UserService) Update(email string, u *models.UpdateUserRequest) (*models
 	return updatedUser, nil
 }
 
-func (s *UserService) Delete(email string) bool {
-	data := s.GetByEmail(email)
-	for i, v := range data {
-		if v.Email == email {
-			s.repo.Delete(i)
-		}
+func (s *UserService) Delete(email string) error {
+	user := s.repo.GetByEmail(email)
+
+	if user == nil {
+		return errors.New("User not found")
 	}
-	return true
+
+	err := s.repo.Delete(email)
+	if err != nil {
+		return fmt.Errorf("failed to delete user: %w", err)
+	}
+
+	return nil
 }
