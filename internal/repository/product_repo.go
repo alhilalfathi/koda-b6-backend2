@@ -14,10 +14,13 @@ func NewProductRepository(products *[]models.Product) *ProductRepository {
 		p: products,
 	}
 }
+
+// get all product
 func (r *ProductRepository) GetAllProduct() *[]models.Product {
 	return r.p
 }
 
+// get product by id
 func (r *ProductRepository) GetProductById(id string) *models.Product {
 	data := *r.p
 	strId, _ := strconv.Atoi(id)
@@ -27,4 +30,17 @@ func (r *ProductRepository) GetProductById(id string) *models.Product {
 		}
 	}
 	return &models.Product{}
+}
+
+// delete product
+func (r *ProductRepository) Delete(id string) error {
+	data := *r.p
+	strId, _ := strconv.Atoi(id)
+	// data = append(data[:index], data[index+1:]...)
+	for i, v := range data {
+		if v.Id == strId {
+			data = append(data[:i], data[i+1:]...)
+		}
+	}
+	return nil
 }

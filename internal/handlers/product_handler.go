@@ -43,3 +43,20 @@ func (h *ProductHandler) GetProductById(ctx *gin.Context) {
 		"results": data,
 	})
 }
+
+func (h *ProductHandler) Delete(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	err := h.service.Delete(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusBadRequest, gin.H{
+		"success": true,
+		"message": "Product deleted",
+	})
+}
