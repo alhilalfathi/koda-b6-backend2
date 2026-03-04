@@ -25,3 +25,21 @@ func (h *ProductHandler) GetAll(ctx *gin.Context) {
 		"results": products,
 	})
 }
+
+func (h *ProductHandler) GetProductById(ctx *gin.Context) {
+	id := ctx.Param("id")
+	data := h.service.GetProductById(id)
+
+	if data == nil {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"success": false,
+			"message": "Product not found",
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Product found",
+		"results": data,
+	})
+}

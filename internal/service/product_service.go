@@ -17,3 +17,6 @@ func NewProductService(rp *repository.ProductRepository) *ProductService {
 func (s *ProductService) GetAll() []models.Product {
 	return *s.repo.GetAllProduct()
 }
+func (s *ProductService) GetProductById(id string) *models.Product {
+	return s.repo.GetProductById(id)
+}
