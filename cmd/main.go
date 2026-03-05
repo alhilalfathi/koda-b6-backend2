@@ -28,6 +28,7 @@ func main() {
 		products.GET("", productHandler.GetAllProduct)
 		products.GET("/:id", productHandler.GetProductById)
 		products.POST("", productHandler.CreateProduct)
+		products.PUT("/:id", productHandler.UpdateProduct)
 		products.DELETE("", productHandler.Delete)
 	}
 
