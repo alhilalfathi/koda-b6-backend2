@@ -32,8 +32,8 @@ func (h *ProductHandler) CreateProduct(ctx *gin.Context) {
 	})
 }
 
-func (h *ProductHandler) GetAll(ctx *gin.Context) {
-	products := h.service.GetAll()
+func (h *ProductHandler) GetAllProduct(ctx *gin.Context) {
+	products := h.service.GetAllProduct()
 	ctx.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "List of all products",

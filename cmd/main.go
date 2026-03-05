@@ -25,7 +25,7 @@ func main() {
 
 	products := r.Group("/products")
 	{
-		products.GET("", productHandler.GetAll)
+		products.GET("", productHandler.GetAllProduct)
 		products.GET("/:id", productHandler.GetProductById)
 		products.POST("", productHandler.CreateProduct)
 		products.DELETE("", productHandler.Delete)

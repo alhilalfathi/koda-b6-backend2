@@ -32,7 +32,7 @@ func (s *ProductService) CreateProduct(p models.CreateProductRequest) {
 	s.repo.CreateProduct(newProduct)
 }
 
-func (s *ProductService) GetAll() []models.Product {
+func (s *ProductService) GetAllProduct() []models.Product {
 	return *s.repo.GetAllProduct()
 }
 
