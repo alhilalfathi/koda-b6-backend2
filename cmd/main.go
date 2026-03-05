@@ -12,17 +12,23 @@ func main() {
 	container := di.NewContainer()
 
 	userHandler := container.UserHandler()
+	productHandler := container.ProductHandler()
 
 	users := r.Group("/users")
 	{
 		users.GET("", userHandler.GetAll)
 		users.GET("/:email", userHandler.GetByEmail)
 		users.POST("", userHandler.Create)
+		users.PUT("/:email", userHandler.Update)
+		users.DELETE("/:email", userHandler.Delete)
 	}
 
 	products := r.Group("/products")
 	{
-		products.GET("")
+		products.GET("", productHandler.GetAll)
+		products.GET("/:id", productHandler.GetProductById)
+		products.POST("", productHandler.CreateProduct)
+		products.DELETE("", productHandler.Delete)
 	}
 
 	r.Run("localhost:8888")
