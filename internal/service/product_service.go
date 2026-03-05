@@ -40,6 +40,17 @@ func (s *ProductService) GetProductById(id string) *models.Product {
 	return s.repo.GetProductById(id)
 }
 
+func (s *ProductService) UpdateProduct(id string, p models.UpdateProductRequest) error {
+	product := s.repo.GetProductById(id)
+	if product == nil {
+		return errors.New("Product not found")
+	}
+	product.ProductName = p.ProductName
+	product.Price = p.Price
+
+	return s.repo.UpdateProduct(id, *product)
+}
+
 func (s *ProductService) Delete(id string) error {
 	user := s.repo.GetProductById(id)
 

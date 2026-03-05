@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"koda-b6-backend2/internal/models"
 	"strconv"
 )
@@ -35,6 +36,19 @@ func (r *ProductRepository) GetProductById(id string) *models.Product {
 		}
 	}
 	return &models.Product{}
+}
+
+// update product
+func (r *ProductRepository) UpdateProduct(id string, updated models.Product) error {
+	data := *r.p
+	strId, _ := strconv.Atoi(id)
+	for i, v := range data {
+		if v.Id == strId {
+			data[i] = updated
+			return nil
+		}
+	}
+	return errors.New("Product not found")
 }
 
 // delete product

@@ -22,12 +22,14 @@ func (h *ProductHandler) CreateProduct(ctx *gin.Context) {
 	var newProduct models.CreateProductRequest
 	if err := ctx.ShouldBindJSON(&newProduct); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"success": false,
+			"message": err.Error(),
 		})
 		return
 	}
 	h.service.CreateProduct(newProduct)
 	ctx.JSON(http.StatusCreated, gin.H{
+		"success": true,
 		"message": "Product created",
 	})
 }
@@ -56,6 +58,33 @@ func (h *ProductHandler) GetProductById(ctx *gin.Context) {
 		"success": true,
 		"message": "Product found",
 		"results": data,
+	})
+}
+
+func (h *ProductHandler) UpdateProduct(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	var newProduct models.UpdateProductRequest
+
+	if err := ctx.ShouldBindJSON(&newProduct); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Update failed",
+		})
+		return
+	}
+
+	err := h.service.UpdateProduct(id, newProduct)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusBadRequest, gin.H{
+		"success": true,
+		"message": "Update product successfuly",
 	})
 }
 
