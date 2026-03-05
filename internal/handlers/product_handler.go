@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"koda-b6-backend2/internal/models"
 	"koda-b6-backend2/internal/service"
 	"net/http"
 
@@ -15,6 +16,20 @@ func NewProductHandler(sr *service.ProductService) *ProductHandler {
 	return &ProductHandler{
 		service: sr,
 	}
+}
+
+func (h *ProductHandler) CreateProduct(ctx *gin.Context) {
+	var newProduct models.CreateProductRequest
+	if err := ctx.ShouldBindJSON(&newProduct); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	h.service.CreateProduct(newProduct)
+	ctx.JSON(http.StatusCreated, gin.H{
+		"message": "Product created",
+	})
 }
 
 func (h *ProductHandler) GetAll(ctx *gin.Context) {

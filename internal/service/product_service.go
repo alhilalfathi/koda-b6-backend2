@@ -17,6 +17,21 @@ func NewProductService(rp *repository.ProductRepository) *ProductService {
 	}
 }
 
+func (s *ProductService) CreateProduct(p models.CreateProductRequest) {
+	products := *s.repo.GetAllProduct()
+	newID := 1
+	if len(products) > 0 {
+		newID = products[len(products)-1].Id + 1
+	}
+
+	newProduct := models.Product{
+		Id:          newID,
+		ProductName: p.ProductName,
+		Price:       p.Price,
+	}
+	s.repo.CreateProduct(newProduct)
+}
+
 func (s *ProductService) GetAll() []models.Product {
 	return *s.repo.GetAllProduct()
 }

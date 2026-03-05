@@ -15,6 +15,11 @@ func NewProductRepository(products *[]models.Product) *ProductRepository {
 	}
 }
 
+// create product
+func (r *ProductRepository) CreateProduct(product models.Product) {
+	*r.p = append(*r.p, product)
+}
+
 // get all product
 func (r *ProductRepository) GetAllProduct() *[]models.Product {
 	return r.p
@@ -36,7 +41,6 @@ func (r *ProductRepository) GetProductById(id string) *models.Product {
 func (r *ProductRepository) Delete(id string) error {
 	data := *r.p
 	strId, _ := strconv.Atoi(id)
-	// data = append(data[:index], data[index+1:]...)
 	for i, v := range data {
 		if v.Id == strId {
 			data = append(data[:i], data[i+1:]...)
