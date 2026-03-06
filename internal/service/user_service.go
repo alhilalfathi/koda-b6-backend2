@@ -17,23 +17,46 @@ func NewUserService(rp *repository.UserRepository) *UserService {
 	}
 }
 
-func (s *UserService) GetAll() []models.User {
-	return *s.repo.GetAllUser()
+func (s *UserService) GetAll() ([]models.User, error) {
+	users, err := s.repo.GetAllUser()
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
-func (s *UserService) GetByEmail(email string) *models.User {
-	return s.repo.GetByEmail(email)
+func (s *UserService) GetByEmail(email string) (*models.User, error) {
+
+	user, err := s.repo.GetByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
-func (s *UserService) Create(req *models.CreateUserRequest) {
+func (s *UserService) Create(req *models.CreateUserRequest) error {
+
+	if req.Email == "" || req.Password == "" {
+		return errors.New("Email and password required")
+	}
+
 	newUser := models.User{
 		Email:    req.Email,
 		Password: req.Password,
 	}
-	s.repo.Create(newUser)
+
+	err := s.repo.Create(newUser)
+	if err != nil {
+		return fmt.Errorf("Failed to create user: %w", err)
+	}
+
+	return nil
 }
 
 func (s *UserService) Update(email string, u *models.UpdateUserRequest) (*models.User, error) {
+
 	if u.Password == "" {
 		return nil, errors.New("Password cannot blank")
 	}
@@ -44,22 +67,22 @@ func (s *UserService) Update(email string, u *models.UpdateUserRequest) (*models
 
 	updatedUser, err := s.repo.Update(email, user)
 	if err != nil {
-		return nil, fmt.Errorf("failed to update user: %w", err)
+		return nil, fmt.Errorf("Failed to update user: %w", err)
 	}
 
 	return updatedUser, nil
 }
 
 func (s *UserService) Delete(email string) error {
-	user := s.repo.GetByEmail(email)
 
-	if user == nil {
+	_, err := s.repo.GetByEmail(email)
+	if err != nil {
 		return errors.New("User not found")
 	}
 
-	err := s.repo.Delete(email)
+	err = s.repo.Delete(email)
 	if err != nil {
-		return fmt.Errorf("failed to delete user: %w", err)
+		return fmt.Errorf("Failed to delete user: %w", err)
 	}
 
 	return nil
