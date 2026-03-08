@@ -1,15 +1,30 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"koda-b6-backend2/internal/di"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	godotenv.Load()
+
+	connConfig, _ := pgx.ParseConfig("")
+
+	conn, err := pgx.Connect(context.Background(), connConfig.ConnString())
+
+	if err != nil {
+		fmt.Println("Failed to connecting db")
+	}
+
 	r := gin.Default()
 
-	container := di.NewContainer()
+	container := di.NewContainer(conn)
 
 	userHandler := container.UserHandler()
 	productHandler := container.ProductHandler()
