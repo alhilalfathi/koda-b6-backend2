@@ -5,10 +5,12 @@ import (
 	"koda-b6-backend2/internal/models"
 	"koda-b6-backend2/internal/repository"
 	"koda-b6-backend2/internal/service"
+
+	"github.com/jackc/pgx/v5"
 )
 
 type Container struct {
-	user        *[]models.User
+	user        *pgx.Conn
 	userRepo    *repository.UserRepository
 	userService *service.UserService
 	userHandler *handlers.UserHandler
@@ -19,12 +21,12 @@ type Container struct {
 	productHandler *handlers.ProductHandler
 }
 
-func NewContainer() *Container {
-	var DataUser []models.User
+func NewContainer(db *pgx.Conn) *Container {
+
 	var DataProduct []models.Product
 
 	container := Container{
-		user:    &DataUser,
+		user:    db,
 		product: &DataProduct,
 	}
 
