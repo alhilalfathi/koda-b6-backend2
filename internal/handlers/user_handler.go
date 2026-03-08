@@ -20,7 +20,15 @@ func NewUserHandler(sr *service.UserService) *UserHandler {
 
 // get all user
 func (h *UserHandler) GetAll(ctx *gin.Context) {
-	users := h.service.GetAll()
+	users, err := h.service.GetAll()
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Input invalid",
+		})
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "List of all users",
@@ -31,7 +39,14 @@ func (h *UserHandler) GetAll(ctx *gin.Context) {
 // get user by email
 func (h *UserHandler) GetByEmail(ctx *gin.Context) {
 	email := ctx.Param("email")
-	user := h.service.GetByEmail(email)
+	user, err := h.service.GetByEmail(email)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Input Invalid",
+		})
+	}
 
 	if user == nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
